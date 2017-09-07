@@ -12,8 +12,8 @@ class ReservationModelTest(TestCase):
             first_name='Greg',
             last_name='Greggie',
             room_number='28',
-            start_date=timezone.now(),
-            end_date=timezone.now() - timezone.timedelta(minutes=1)
+            start_date=timezone.now().date(),
+            end_date=(timezone.now() - timezone.timedelta(minutes=1)).date()
         )
         serializer = ReservationSerializer(instance=reservation)
         serializer = ReservationSerializer(data=serializer.data)

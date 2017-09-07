@@ -6,7 +6,5 @@ class Reservation(models.Model):
     first_name = models.CharField(max_length=256)
     last_name = models.CharField(max_length=256)
     room_number = models.CharField(max_length=256)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-
-    # todo: make date not datetime
+    start_date = models.DateField()
+    end_date = models.DateField()

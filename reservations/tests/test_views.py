@@ -18,16 +18,16 @@ class ReservationViewsTest(APITestCase):
                 'first_name': 'Sten',
                 'last_name': 'Kroenke',
                 'room_number': '2A',
-                'start_date': timezone.now(),
-                'end_date': timezone.now()+timezone.timedelta(days=1),
+                'start_date': timezone.now().date(),
+                'end_date': (timezone.now()+timezone.timedelta(days=1)).date(),
             }
 
     invalid_data = {
         'first_name': 'Sten',
         'last_name': 'Kroenke',
         'room_number': '2A',
-        'start_date': timezone.now() + timezone.timedelta(days=1),
-        'end_date': timezone.now(),
+        'start_date': (timezone.now() + timezone.timedelta(days=1)).date(),
+        'end_date': timezone.now().date(),
     }
 
     def setUp(self):
