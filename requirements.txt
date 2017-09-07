@@ -1,0 +1,4 @@
+Django==1.11.5
+djangorestframework==3.6.4
+factory-boy==2.9.2
+Faker==0.8.3
