@@ -1,6 +1,5 @@
 from django.test import TestCase
 from django.utils import timezone
-from rest_framework.exceptions import ValidationError
 
 from reservations.models import Reservation
 from reservations.serializers import ReservationSerializer
@@ -19,4 +18,3 @@ class ReservationModelTest(TestCase):
         serializer = ReservationSerializer(data=serializer.data)
         self.assertFalse(serializer.is_valid())
         self.assertIn('end_date', serializer.errors)
-

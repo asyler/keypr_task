@@ -16,9 +16,10 @@ Including another URLconf
 # from django.contrib import admin
 from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
+
 from reservations.views import ReservationsView
 
-router = DefaultRouter()
+router = DefaultRouter(trailing_slash=False)
 router.register(r'reservations', ReservationsView)
 
 urlpatterns = [

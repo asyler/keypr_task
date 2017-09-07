@@ -5,7 +5,6 @@ from reservations.models import Reservation
 
 
 class ReservationSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Reservation
         fields = ('id', 'first_name', 'last_name', 'room_number', 'start_date', 'end_date')
