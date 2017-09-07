@@ -1,0 +1,124 @@
+import json
+
+from django.urls import reverse
+from django.utils import timezone
+from rest_framework import status
+from rest_framework.test import APITestCase
+
+from reservations.factories import ReservationFactory
+from reservations.models import Reservation
+from reservations.serializers import ReservationSerializer
+
+
+class ReservationViewsTest(APITestCase):
+    list_url_name = 'reservation-list'
+    detail_url_name = 'reservation-detail'
+
+    valid_data = {
+                'first_name': 'Sten',
+                'last_name': 'Kroenke',
+                'room_number': '2A',
+                'start_date': timezone.now(),
+                'end_date': timezone.now()+timezone.timedelta(days=1),
+            }
+
+    invalid_data = {
+        'first_name': 'Sten',
+        'last_name': 'Kroenke',
+        'room_number': '2A',
+        'start_date': timezone.now() + timezone.timedelta(days=1),
+        'end_date': timezone.now(),
+    }
+
+    def setUp(self):
+        ReservationFactory.create()
+
+    def test_smoke_GET_returns_json_200(self):
+        response = self.client.get(reverse(self.list_url_name))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['content-type'], 'application/json')
+
+    def test_GET_return_all_items(self):
+        response = self.client.get(reverse(self.list_url_name))
+
+        items = Reservation.objects.all()
+        serializer = ReservationSerializer(items, many=True)
+        self.assertEqual(response.data,serializer.data)
+
+    def test_GET_valid_single_item(self):
+        response = self.client.get(
+            reverse(self.detail_url_name, kwargs = { 'pk': 1 }))
+        item = Reservation.objects.get(pk = 1)
+
+        serializer = ReservationSerializer(item)
+        self.assertEqual(response.data, serializer.data)
+
+    def test_GET_invalid_single_item(self):
+        response = self.client.get(
+            reverse(self.detail_url_name, kwargs={'pk': 42}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_create_valid_item(self):
+        response = self.client.post(
+            reverse('reservation-list'),
+            self.valid_data
+        )
+
+        item = Reservation.objects.last()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(item.last_name,'Kroenke')
+
+    def test_create_invalid_item(self):
+        count_before = Reservation.objects.count()
+
+        response = self.client.post(
+            reverse('reservation-list'),
+            self.invalid_data
+        )
+
+        count_after = Reservation.objects.count()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(count_after, count_before)
+
+    def test_valid_update_item(self):
+        response = self.client.put(
+            reverse(self.detail_url_name, kwargs={'pk': 1}),
+            self.valid_data
+        )
+
+        item = Reservation.objects.get(pk=1)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(item.last_name, 'Kroenke')
+
+    def test_invalid_update_item(self):
+        original_last_name = Reservation.objects.get(pk=1).last_name
+
+        response = self.client.put(
+            reverse(self.detail_url_name, kwargs={'pk': 1}),
+            self.invalid_data
+        )
+
+        new_last_name = Reservation.objects.get(pk=1).last_name
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(original_last_name,new_last_name)
+
+    def test_delete_valid_item(self):
+        count_before = Reservation.objects.count()
+
+        response = self.client.delete(reverse(self.detail_url_name, kwargs={'pk': 1}))
+
+        count_after = Reservation.objects.count()
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(count_after+1, count_before)
+
+    def test_delete_invalid_item(self):
+        count_before = Reservation.objects.count()
+
+        response = self.client.delete(reverse(self.detail_url_name, kwargs={'pk': 42}))
+
+        count_after = Reservation.objects.count()
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(count_after, count_before)
+
+
+
