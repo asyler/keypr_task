@@ -10,8 +10,3 @@ class Reservation(models.Model):
     end_date = models.DateTimeField()
 
     # todo: make date not datetime
-
-    # todo: move validation to serializer
-    def clean(self):
-        if self.start_date >= self.end_date:
-            raise ValidationError('End date should be after start date')
