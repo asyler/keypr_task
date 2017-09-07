@@ -16,7 +16,7 @@ class ReservationModelTest(TestCase):
         self._test_field_cannot_be_empty('end_date')
         self._test_field_cannot_be_empty('first_name')
         self._test_field_cannot_be_empty('last_name')
-        self._test_field_cannot_be_empty('room')
+        self._test_field_cannot_be_empty('room_number')
 
     def test_start_date_should_be_before_end_date(self):
         reservation = Reservation(
