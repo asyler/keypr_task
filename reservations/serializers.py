@@ -1,5 +1,5 @@
-import serializers
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from reservations.models import Reservation
 
@@ -11,5 +11,5 @@ class ReservationSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs['start_date'] >= attrs['end_date']:
-            raise serializers.ValidationError({'end_date': 'End date should be after start date'})
+            raise ValidationError({'end_date': 'End date should be after start date'})
         return attrs

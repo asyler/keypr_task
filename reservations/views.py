@@ -14,6 +14,7 @@ class DateRangeFilter(filters.BaseFilterBackend):
             )
         return queryset
 
+
 class ReservationsView(viewsets.ModelViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer

@@ -36,9 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'django_filters',
     'reservations',
-    'coreapi',
 ]
 
 MIDDLEWARE = [
@@ -56,8 +54,7 @@ ROOT_URLCONF = 'keypr_task.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': []
-        ,
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
