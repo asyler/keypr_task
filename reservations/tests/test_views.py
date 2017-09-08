@@ -148,8 +148,8 @@ class ReservationSearchTest(TestCase):
         response = self.client.get(
             reverse('reservation-list'),
             {
-                'start_date_range': '2017-09-13',
-                'end_date_range': '2017-09-06'
+                'start_date_range': '2017-09-09',
+                'end_date_range': '2017-09-08'
             }
         )
 
